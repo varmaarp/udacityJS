@@ -10,6 +10,8 @@ $(function(){
         
         currentCat : null,
 
+        adminMode : null,
+
         cats : [new Cat("toby",1),
                 new Cat("tom",2),
                 new Cat("bob",3),
@@ -20,9 +22,11 @@ $(function(){
     var controller = {
 
         init : function(){
+            model.adminMode = false;
             model.currentCat = model.cats[0];
             catView.init();
             catListView.init();
+            formView.init();
         },
 
         getCurrentCat : function(){
@@ -40,6 +44,24 @@ $(function(){
         incrementCount : function(){
             model.currentCat.count++;
             catView.render();
+            formView.render();
+        },
+
+        setAdminMode : function(val){
+            model.adminMode = val;
+            formView.render();
+        },
+
+        getAdminMode : function(){
+            return model.adminMode;
+        },
+
+        updateCatValues : function(name, score){
+            model.currentCat.name = name;
+            model.currentCat.count = score;
+            catView.render();
+            formView.render();
+            catListView.render();
         }
     };
 
@@ -58,6 +80,7 @@ $(function(){
             $('#cat-name').text(currentCat.name);
             $('#num').text(currentCat.count);
             $('#cat-image').attr('src',currentCat.src);
+            
         }
     };
 
@@ -69,6 +92,7 @@ $(function(){
 
         render : function(){
             var cats = controller.getAllCats();
+            $('#cats').empty();
             
             for (var i=0; i < cats.length; i++){
                 var cat = cats[i]
@@ -77,8 +101,44 @@ $(function(){
                     return function(){     
                         controller.setCurrentCat(incat);
                         catView.render();
+                        formView.render();
                     };
                 })(cat));
+            }
+        }
+    }
+
+    var formView = {
+        
+        init : function(){
+
+            $('#admin').on('click',function(){
+                controller.setAdminMode(true);
+            });
+
+            $('#save').on('click',function(){
+                controller.updateCatValues($('#catname').val(),$('#score').val());
+                controller.setAdminMode(false);
+            });
+
+            $('#cancel').on('click',function(){
+                controller.setAdminMode(false);
+            });
+                            
+            this.render();
+        },
+
+        render : function(){
+
+            var cat = controller.getCurrentCat();
+
+            $('#catname').val(cat.name);
+            $('#score').val(cat.count);
+
+            if(controller.getAdminMode()){
+                $('#cat-form').css("display", "inline-block");
+            } else{
+                $('#cat-form').css("display", "none");
             }
         }
     }

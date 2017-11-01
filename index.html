@@ -11,12 +11,25 @@
             </ul>
         </div>
         </br>
+
+        
+       
         <div id="cat-section" style="padding-left: 20px;">
             <h2 id="cat-name" >
             </h2>
-
-            <img id="cat-image" src="" width='400' height='300' style='padding:20px' >
-            </img>
+            <button id="admin">Admin</button>
+            <div id="cat-details">
+                
+                <img id="cat-image" src="" width='400' height='300' style='padding:20px' ></img>
+                    
+                <form id="cat-form" style="display: none">
+                    Cat name: <input type="text" name="firstname" id="catname">
+                    <br><br>
+                    No of Clicks: <input type="text" name="score" id="score">
+                    <br><br>
+                    <input type="button" id="save" value="Save">  <input type="button" id="cancel" value="Cancel">
+                </form>
+            </div>
 
             <div id="score">
                 Your score is : <span id="num" style="font-weight: bold">0</span>
